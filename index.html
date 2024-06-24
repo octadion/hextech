@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hextech</title>
+    <style>
+        body {
+            background-color: black;
+            color: limegreen;
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .terminal {
+            background-color: black;
+            font-family: 'Courier New', monospace;
+        }
+
+        .output {
+            margin-bottom: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+        }
+
+        .input-line {
+            display: flex;
+            align-items: center;
+        }
+
+        .input-line .blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .input {
+            color: limegreen;
+            background: transparent;
+            border: none;
+            outline: none;
+            width: 100%;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+        }
+
+        .input::placeholder {
+            color: limegreen;
+        }
+
+        .button {
+            background-color: transparent;
+            border: 1px solid limegreen;
+            color: limegreen;
+            padding: 5px 10px;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: limegreen;
+            color: black;
+        }
+
+        .link {
+            color: limegreen;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        #title {
+            white-space: pre;
+            font-size: 20px; /* Ukuran teks yang lebih besar */
+            margin-bottom: 10px;
+            margin-left: 0; /* Atur margin kiri menjadi 0 */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="terminal">
+        <pre id="title">
+_                _            _     
+| |__   _____  __| |_ ___  ___| |__  
+| '_ \ / _ \ \/ /| __/ _ \/ __| '_ \ 
+| | | |  __/>  < | ||  __/ (__| | | |
+|_| |_|\___/_/\_(_)__\___|\___|_| |_|
+                                        
+</pre>
+<div class="output">Hextech [Version 10.0.22621.3155]</div>
+<div class="output">(c) Hextech Corporation. All rights reserved.</div>
+        <div class="output">welcome, type 'help' to get knowledge about commands.</div>
+        <div class="output"></div>
+        <div class="input-line">
+            <span class="blink">></span>
+            <input id="command-line" class="input" autofocus placeholder="" />
+        </div>
+    </div>
+
+    <script>
+        const outputDiv = document.querySelector('.output');
+        const inputField = document.getElementById('command-line');
+        const prompt = document.querySelector('.blink');
+        let isInitialLoad = true;
+
+        const responses = {
+            'help': `available Commands: help, clear, aboutme, contact, projects, calculator, website`,
+            'clear': '',
+            'aboutme': `i'm hex`,
+            'contact': `are you sure? <button class="button" onclick="confirmAction('Yes')">y</button><button class="button" onclick="confirmAction('No')">n</button>`,
+            'projects': `my procjects: rnn, lstm, transformer, gan, diffusion.`,
+            'calculator': `try commands like 'add 2 3', 'subtract 5 1', 'multiply 4 6', 'divide 8 2'.`,
+            'linkedin': `linkedin.com/in/octadion`,
+        };
+
+        inputField.addEventListener('keyup', function (event) {
+            if (event.key === 'Enter') {
+                const command = inputField.value.toLowerCase();
+                inputField.value = '';
+
+                if (isInitialLoad) {
+                    isInitialLoad = false;
+                }
+
+                setTimeout(() => {
+                    prompt.style.opacity = 0;
+                    setTimeout(() => {
+                        prompt.style.opacity = 1;
+
+                        if (command.trim() === '') {
+                            return;
+                        }
+
+                        let output = '';
+                        let response = responses[command];
+
+                        if (response) {
+                            output = `<div class="output">${response}</div>`;
+                        } else {
+                            output = `<div class="output">unknown command. type 'help' for available commands.</div>`;
+                        }
+
+                        outputDiv.innerHTML += output;
+                        outputDiv.scrollTop = outputDiv.scrollHeight;
+                    }, Math.random() * 500 + 50);
+                }, Math.random() * 1000 + 500);
+            }
+        });
+
+        function confirmAction(choice) {
+            if (choice === 'Yes') {
+                outputDiv.innerHTML += `<div class="output">mail me at octadion.ai@gmail.com!</div>`;
+            } else {
+                outputDiv.innerHTML += `<div class="output">:(</div>`;
+            }
+        }
+
+        function openLink(link) {
+            window.open(link, '_blank');
+        }
+    </script>
+</body>
+
+</html>
